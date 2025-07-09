@@ -4,18 +4,33 @@ import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { auth } from "@/shared/lib/firebase"
 import { useAuthState } from "react-firebase-hooks/auth"
+import { useClient } from "@/shared/hooks/useClient"
 
 export default function ChatPage() {
-  const [user, loading] = useAuthState(auth)
+  const [user, loading, error] = useAuthState(auth)
   const router = useRouter()
+  const mounted = useClient()
 
   useEffect(() => {
+    if (!mounted) return
+
     if (!loading && !user) {
       router.replace("/login")
     }
-  }, [user, loading, router])
+  }, [user, loading, mounted, router])
 
-  if (loading) return <div className="text-center mt-10">Loading...</div>
+  if (!mounted || loading) {
+    return <div className="text-center mt-10">Loading...</div>
+  }
+
+  if (error) {
+    return (
+      <div className="text-center mt-10 text-red-500">
+        Error: {error.message}
+      </div>
+    )
+  }
+
   if (!user) return null
 
   return (
