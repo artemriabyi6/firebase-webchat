@@ -1,14 +1,13 @@
-"use client"
+// src/app/providers.tsx
+"use client";
 
-import { useEffect } from "react"
-import { Provider } from "react-redux"
-import { store } from "../store"
-import { initAuthListener } from "../features/auth/store/authThunks"
+import { Provider } from "react-redux";
+import { store } from "@/store";
 
-export default function ProvidersWrapper({ children }: { children: React.ReactNode }) {
-  useEffect(() => {
-    store.dispatch(initAuthListener())
-  }, [])
-
-  return <Provider store={store}>{children}</Provider>
+export default function Providers({ 
+  children 
+}: { 
+  children: React.ReactNode 
+}) {
+  return <Provider store={store}>{children}</Provider>;
 }
